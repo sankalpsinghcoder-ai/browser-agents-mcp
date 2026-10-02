@@ -1,8 +1,7 @@
-/* =========================================================
-   WEB AGENT MCP — v0.3.0
+/*
    Multi-agent browser automation with human-like behavior,
    CAPTCHA solving, identity vault, and agent messaging.
-========================================================= */
+*/
 
 import { McpServer, fromJsonSchema } from "@modelcontextprotocol/server";
 import { NodeStreamableHTTPServerTransport } from "@modelcontextprotocol/node";
@@ -36,7 +35,7 @@ const server = new McpServer({
 
 
 /* =========================================================
-   ZOD 3 -> JSON SCHEMA WRAPPER (Fixes Antigravity tools/list)
+   ZOD 3 : JSON SCHEMA WRAPPER
 ========================================================= */
 const _origRegisterTool = server.registerTool.bind(server);
 (server as any).registerTool = (name: string, config: any, handler: any) => {
