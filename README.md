@@ -111,64 +111,11 @@ Expected response:
 
 ---
 
-## Connecting an AI Client
-
-The MCP endpoint is:
-
-```
-http://localhost:3000/mcp
-```
-
-### Claude Desktop
-
-Edit the config file:
-
-- Windows: `%APPDATA%\Claude\claude_desktop_config.json`
-- macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
-
-Add:
-
-```json
-{
-  "mcpServers": {
-    "browser-agents": {
-      "url": "http://localhost:3000/mcp"
-    }
-  }
-}
-```
-
-Restart Claude Desktop.
-
-### Cursor
-
-Add to Cursor's MCP settings:
-
-```json
-{
-  "mcpServers": {
-    "browser-agents": {
-      "url": "http://localhost:3000/mcp"
-    }
-  }
-}
-```
-
-### Other MCP Clients
-
-Use the Streamable HTTP transport and point it at:
-
-```
-http://localhost:3000/mcp
-```
-
----
-
 ## Remote Access
 
 `localhost` only works if the AI client runs on the same machine as the server. To expose the server to a remote client, use one of these options.
 
-### Option 1: ngrok (quick testing)
+### Option 1: ngrok
 
 ```bash
 ngrok http 3000
