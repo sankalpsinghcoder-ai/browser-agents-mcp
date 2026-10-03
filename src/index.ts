@@ -1,6 +1,7 @@
 /*
    Multi-agent browser automation with human-like behavior,
    CAPTCHA solving, identity vault, and agent messaging.
+   Note: Some tools are made by AI and checked before committing the code.
 */
 
 import { McpServer, fromJsonSchema } from "@modelcontextprotocol/server";
@@ -17,9 +18,7 @@ import crypto from "node:crypto";
 
 chromium.use(StealthPlugin());
 
-/* =========================================================
-   CONFIG
-========================================================= */
+// --- CONFIG
 
 const PORT = Number(process.env.PORT || 3000);
 const CAPTCHA_KEY = process.env.CAPTCHA_API_KEY || "";
@@ -33,10 +32,8 @@ const server = new McpServer({
 });
 
 
+// --- ZOD 3 : JSON SCHEMA WRAPPER
 
-/* =========================================================
-   ZOD 3 : JSON SCHEMA WRAPPER
-========================================================= */
 const _origRegisterTool = server.registerTool.bind(server);
 (server as any).registerTool = (name: string, config: any, handler: any) => {
   const rawSchema = config?.inputSchema;
@@ -65,9 +62,7 @@ const _origRegisterTool = server.registerTool.bind(server);
 };
 
 
-/* =========================================================
-   HUMANIZE — mouse / typing / scroll
-========================================================= */
+// --- HUMAN LIKE TASK
 
 function rnd(min: number, max: number) {
   return Math.random() * (max - min) + min;
@@ -146,9 +141,7 @@ async function humanScroll(page: Page, amount: number) {
   }
 }
 
-/* =========================================================
-   STEALTH INIT SCRIPT
-========================================================= */
+// --- STEALTH INIT SCRIPT
 
 const stealthInitScript = () => {
   Object.defineProperty(navigator, "webdriver", { get: () => undefined });
@@ -179,9 +172,7 @@ const stealthInitScript = () => {
   } catch {}
 };
 
-/* =========================================================
-   SESSION MANAGER
-========================================================= */
+// --- SESSION MANAGER
 
 export interface SessionOptions {
   agentId: string;
@@ -320,9 +311,8 @@ class SessionManager {
 
 const sessions = new SessionManager();
 
-/* =========================================================
-   HELPERS
-========================================================= */
+
+// --- HELPERS
 
 function jsonResponse(value: unknown) {
   return {
@@ -341,9 +331,7 @@ const agentIdSchema = z
   .min(1);
 
 
-/* =========================================================
-   CAPTCHA MODULE
-========================================================= */
+// --- CAPTCHA MODULE
 
 type CaptchaType =
   | "recaptcha_v2"
@@ -539,9 +527,8 @@ async function solveCaptcha(
   return { type, solved: false };
 }
 
-/* =========================================================
-   IDENTITY VAULT
-========================================================= */
+
+// --- IDENTITY VAULT
 
 interface Identity {
   agentId: string;
@@ -628,15 +615,11 @@ async function waitForEmail(
   return null;
 }
 
-/* =========================================================
-   AGENT MESSAGING (in-memory)
-========================================================= */
+// --- AGENT MESSAGING (IN-MEMORY)
 
 const inbox = new Map<string, string[]>();
 
-/* =========================================================
-   NAVIGATION TOOLS
-========================================================= */
+// --- NAVIGATION TOOLS
 
 server.registerTool(
   "browser_navigate",
@@ -804,9 +787,7 @@ server.registerTool(
   }
 );
 
-/* =========================================================
-   SCREENSHOT / WAIT / KEYS
-========================================================= */
+// --- SCREENSHOT, WAIT, KEYS TOOLS
 
 server.registerTool(
   "browser_screenshot",
@@ -919,9 +900,8 @@ server.registerTool(
   }
 );
 
-/* =========================================================
-   TABS
-========================================================= */
+
+// --- TABS
 
 server.registerTool(
   "browser_new_tab",
@@ -999,9 +979,8 @@ server.registerTool(
   }
 );
 
-/* =========================================================
-   SEMANTIC INSPECT / ELEMENT FIND / EXTRACT
-========================================================= */
+
+// --- SEMANTIC INSPECT, ELEMENT FIND, EXTRACT
 
 server.registerTool(
   "browser_inspect_semantic",
@@ -1188,9 +1167,8 @@ server.registerTool(
   }
 );
 
-/* =========================================================
-   FORM / UPLOAD / DOWNLOAD
-========================================================= */
+
+// --- FORM, UPLOAD, DOWNLOAD
 
 server.registerTool(
   "browser_fill_form",
@@ -1272,9 +1250,8 @@ server.registerTool(
   }
 );
 
-/* =========================================================
-   WAIT HELPERS
-========================================================= */
+
+// --- WAIT HELPERS
 
 server.registerTool(
   "browser_wait_for_element",
@@ -1339,9 +1316,8 @@ server.registerTool(
   }
 );
 
-/* =========================================================
-   PERMISSIONS / SESSION
-========================================================= */
+
+// --- PERMISSIONS AND SESSIONS
 
 server.registerTool(
   "browser_permissions",
@@ -1411,9 +1387,8 @@ server.registerTool(
   async () => jsonResponse({ sessions: sessions.list() })
 );
 
-/* =========================================================
-   PROFILE
-========================================================= */
+
+// --- PROFILE
 
 server.registerTool(
   "browser_profile",
@@ -1427,9 +1402,8 @@ server.registerTool(
   }
 );
 
-/* =========================================================
-   CAPTCHA TOOLS
-========================================================= */
+
+// --- CAPTCHA TOOLS
 
 server.registerTool(
   "captcha_detect",
@@ -1483,9 +1457,8 @@ server.registerTool(
   }
 );
 
-/* =========================================================
-   IDENTITY / ACCOUNT TOOLS
-========================================================= */
+
+// --- IDENTITY AND ACCOUNT TOOLS
 
 server.registerTool(
   "identity_get",
@@ -1634,9 +1607,8 @@ server.registerTool(
   }
 );
 
-/* =========================================================
-   AGENT MESSAGING
-========================================================= */
+
+// --- AGENT MESSAGING
 
 server.registerTool(
   "agent_send",
@@ -1669,9 +1641,8 @@ server.registerTool(
   }
 );
 
-/* =========================================================
-   HIGH-LEVEL TASK
-========================================================= */
+
+// --- HIGH LEVEL TASK
 
 const taskActionSchema = z.discriminatedUnion("action", [
   z.object({ action: z.literal("navigate"), url: z.string() }),
@@ -1799,9 +1770,8 @@ server.registerTool(
   }
 );
 
-/* =========================================================
-   HTTP SERVER
-========================================================= */
+
+// --- HTTP SERVER
 
 const httpServer = createServer(async (req, res) => {
   try {
@@ -1849,9 +1819,8 @@ httpServer.listen(PORT, "0.0.0.0", () => {
   console.log(`CAPTCHA solving: ${CAPTCHA_ENABLED ? "enabled" : "disabled"}`);
 });
 
-/* =========================================================
-   GRACEFUL SHUTDOWN
-========================================================= */
+
+// --- SHUTDOWN
 
 async function shutdown() {
   console.log("Shutting down...");
