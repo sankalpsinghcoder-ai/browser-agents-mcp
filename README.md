@@ -5,7 +5,7 @@
 
 ---
 
-An MCP (Model Context Protocol) server that gives AI assistants full control of a real web browser. It exposes 63 tools for navigation, clicking, typing, form filling, file uploads, downloads, CAPTCHA solving, identity management, and multi-agent coordination. Each AI agent gets its own isolated browser session with a persistent profile and its own stored identity.
+An MCP (Model Context Protocol) server that gives AI assistants full control of a real web browser. It exposes 42 tools for navigation, clicking, typing, form filling, file uploads, downloads, CAPTCHA solving, identity management, and multi-agent coordination. Each AI agent gets its own isolated browser session with a persistent profile and its own stored identity.
 
 ---
 
