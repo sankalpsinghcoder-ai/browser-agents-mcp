@@ -1403,61 +1403,6 @@ server.registerTool(
 );
 
 
-// --- CAPTCHA TOOLS
-
-server.registerTool(
-  "captcha_detect",
-  {
-    description: "Detect the CAPTCHA type present on the active page.",
-    inputSchema: { agentId: agentIdSchema },
-  },
-  async ({ agentId }) => {
-    const s = await sessions.getOrCreate(agentId);
-    const type = await detectCaptcha(s.getPage());
-    return jsonResponse({ type, enabled: CAPTCHA_ENABLED });
-  }
-);
-
-server.registerTool(
-  "captcha_solve",
-  {
-    description:
-      "Detect and solve any CAPTCHA on the active page (checkbox, reCAPTCHA, hCaptcha, Turnstile, image).",
-    inputSchema: { agentId: agentIdSchema },
-  },
-  async ({ agentId }) => {
-    const s = await sessions.getOrCreate(agentId);
-    const result = await solveCaptcha(s.getPage());
-    return jsonResponse(result);
-  }
-);
-
-server.registerTool(
-  "browser_click_and_solve",
-  {
-    description:
-      "Human-like click on element index, wait, then attempt to auto-solve any CAPTCHA that appears.",
-    inputSchema: {
-      agentId: agentIdSchema,
-      index: z.number().int().nonnegative(),
-    },
-  },
-  async ({ agentId, index }) => {
-    const s = await sessions.getOrCreate(agentId);
-    const p = s.getPage();
-
-    const locator = p
-      .locator("button, a, [role='button'], input[type='submit']")
-      .nth(index);
-    await humanClickLocator(p, locator);
-    await p.waitForTimeout(2500);
-
-    const result = await solveCaptcha(p);
-    return jsonResponse(result);
-  }
-);
-
-
 // --- IDENTITY AND ACCOUNT TOOLS
 
 server.registerTool(
