@@ -60,12 +60,9 @@ Create a file named `.env` in the project root:
 
 ```env
 PORT=3000
-CAPTCHA_API_KEY=
 PROFILES_DIR=./profiles
 VAULT_DIR=./vault
 ```
-
-Leave `CAPTCHA_API_KEY` empty to disable CAPTCHA solving.
 
 ### 5. Build
 
@@ -84,7 +81,6 @@ You should see:
 ```
 Web Agent MCP v0.3.0 running on port 3000
 MCP endpoint: http://localhost:3000/mcp
-CAPTCHA solving: disabled
 ```
 
 ---
@@ -221,13 +217,6 @@ Place Nginx or Caddy in front for HTTPS.
 | `browser_permissions` | Grant or clear browser permissions |
 | `browser_profile` | Show the persistent profile path |
 
-### CAPTCHA
-
-| Tool | Description |
-|------|-------------|
-| `captcha_detect` | Detect the CAPTCHA type on the page |
-| `captcha_solve` | Solve any CAPTCHA on the page |
-| `browser_click_and_solve` | Click an element, then solve any CAPTCHA that appears |
 
 ### Identity and Accounts
 
@@ -281,7 +270,6 @@ Environment variables read at startup:
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `PORT` | `3000` | HTTP server port |
-| `CAPTCHA_API_KEY` | empty | 2Captcha API key. Empty disables CAPTCHA solving. |
 | `PROFILES_DIR` | `./profiles` | Folder for persistent browser profiles |
 | `VAULT_DIR` | `./vault` | Folder for stored agent identities |
 
@@ -292,7 +280,6 @@ Environment variables read at startup:
 - The server has no authentication. Do not expose it publicly without protection.
 - `profiles/` contains live browser sessions (cookies, tokens). Never commit or share it.
 - `vault/` contains agent emails and passwords. Never commit or share it.
-- `.env` contains API keys. Never commit it.
 - Use Tailscale, Cloudflare Access, or a reverse proxy with an API key if you need remote access.
 
 ---
